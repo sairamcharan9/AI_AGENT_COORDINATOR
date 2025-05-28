@@ -1,197 +1,260 @@
-# Multi-Agent Assistant with MCP Tools
+# My Awesome Agent
 
-A versatile AI assistant platform built with Google's Agent Development Kit (ADK) that combines specialized agents with Model Context Protocol (MCP) tools for enhanced capabilities.
+Welcome to My Awesome Agent! This project leverages advanced AI models to create a versatile and intelligent agent capable of performing various tasks, from generating LinkedIn posts and resumes to handling file system operations and providing Python programming assistance.
 
-## Overview
+---
 
-This project implements a multi-agent system using Google's Agent Development Kit (ADK). The system consists of a coordinator agent that delegates tasks to specialized sub-agents based on the user's needs. It features robust integration with Model Context Protocol (MCP) tools and includes Windows compatibility fixes.
+## 🚀 Setup & Installation
 
-## Key Features
-
-- **Coordinator Architecture**: Central agent that directs requests to specialized sub-agents
-- **Specialized Agents**:
-  - **LinkedIn Writer**: Creates professional LinkedIn posts with image prompts
-  - **Resume Writer**: Generates ATS-optimized resumes
-  - **Python Agent**: Handles code generation and data analysis
-- **MCP Tools Integration**:
-  - Windows-compatible implementation
-  - Google Maps functionality with fallback mechanisms
-  - Web page content extraction and analysis
-- **Robust State Management**: Maintains context across agent interactions
-- **User Interaction**: Interactive decision-making through choice presentation
-
-## Technical Architecture
-
-### Agent Structure
-
-```
-Coordinator Agent
-├── LinkedIn Writer Agent
-├── Resume Writer Agent
-├── Python Agent
-├── Google Search Tool
-└── MCP Tools (Maps, Web Page Loader, etc.)
-```
-
-### Implementation Details
-
-- **Framework**: Google ADK (Agent Development Kit)
-- **Models**: Gemini models for all agents
-- **MCP Implementation**: Dynamic tool selection with fallback mechanisms
-- **Cross-Platform**: Works on both Windows and Unix-based systems
-- **Error Handling**: Graceful degradation when services are unavailable
-
-## Installation
+Follow these steps to get My Awesome Agent up and running on your local machine.
 
 ### Prerequisites
 
-- Python 3.9+ (3.11 recommended)
-- Google API Key (for Gemini models)
-- Google Maps API Key (optional, for location features)
+*   **Python 3.11+**: Ensure you have Python 3.11 or a newer version installed.
+*   **Poetry**: We use Poetry for dependency management. If you don't have it, install it via `pip`:
+    ```bash
+    pip install poetry
+    ```
+*   **UV (Optional but Recommended)**: For faster dependency resolution and installation, install UV:
+    ```bash
+    pip install uv
+    ```
 
-### Setup
+### Installation Steps
 
-1. **Clone the repository**:
-   ```bash
-   git clone <repository-url>
-   cd my-awesome-agent
-   ```
+1.  **Clone the Repository**:
+    ```bash
+    git clone https://github.com/your-username/my-awesome-agent.git
+    cd my-awesome-agent
+    ```
 
-2. **Create and activate a virtual environment**:
-   ```bash
-   # Using venv
-   python -m venv .venv
-   
-   # On Windows
-   .venv\Scripts\activate
-   
-   # On macOS/Linux
-   source .venv/bin/activate
-   ```
+2.  **Install Dependencies**:
+    Using UV (recommended for speed):
+    ```bash
+    uv pip install "poetry==1.8.2" # Install poetry with uv
+    uv venv # Create virtual environment with uv
+    uv pip install -e ".[dev]" # Install project dependencies including dev dependencies
+    ```
+    Alternatively, using Poetry (if UV is not used or preferred):
+    ```bash
+    poetry install --with dev
+    ```
 
-3. **Install dependencies**:
-   ```bash
-   # Using pip
-   pip install -r requirements.txt
-   
-   # Using Poetry
-   poetry install
-   ```
+3.  **Set Up Environment Variables**:
+    Create a `.env` file in the root directory of the project based on `.env-example`. This file will store your API keys and other configurations.
+    ```bash
+    cp .env-example .env
+    ```
+    Open `.env` and fill in the necessary values. **Do NOT commit your `.env` file to version control!**
 
-4. **Environment configuration**:
-   
-   Create a `.env` file in the project root with the following variables:
-   ```
-   GOOGLE_API_KEY=your_gemini_api_key_here
-   GOOGLE_MAPS_API_KEY=your_maps_api_key_here
-   LINKEDIN_MODEL=gemini-1.5-pro-latest
-   ```
+4.  **Activate Virtual Environment**:
+    If you're using Poetry:
+    ```bash
+    poetry shell
+    ```
+    If you're using UV with `uv venv` (and added it to your PATH):
+    ```bash
+    source .venv/bin/activate # On macOS/Linux
+    .venv\Scripts\activate   # On Windows
+    ```
 
-## Running the Application
+---
 
-### Local Development
+## 🛠️ Development
 
-1. **Start the ADK web interface**:
-   ```bash
-   adk web
-   ```
+### Local Setup
 
-2. **Start the API server** (in a separate terminal):
-   ```bash
-   adk api_server --allow_origins="http://localhost:4200"
-   ```
+*   **Pre-commit Hooks**: We use pre-commit hooks to ensure code quality and consistency. Install them after setting up your environment:
+    ```bash
+    pre-commit install
+    ```
+    This will run checks like linting and formatting before each commit.
 
-3. **Access the interface** at `http://localhost:4200`
+### Running the Agent
 
-### MCP Tools Setup (Optional)
+Instructions on how to run the agent locally for development and testing will go here. (e.g., `python -m app.main` or specific API endpoint calls).
 
-For full MCP functionality:
+### Testing
 
-1. **Windows Users**:
-   - Use the built-in fallback mechanisms (already implemented)
-   - Or, for better performance, consider using Windows Subsystem for Linux (WSL)
+Details on how to run tests and the testing framework used will be provided here. (e.g., `pytest`).
 
-2. **MCP Server URLs** (if manually configuring):
-   - Google Maps: `http://localhost:8082`
-   - Default: `http://localhost:8080`
+---
 
-## Usage Examples
-
-### LinkedIn Content Creation
+## 📂 Project Structure
 
 ```
-User: Create a LinkedIn post about artificial intelligence in healthcare
-Agent: *Researches current trends in AI healthcare*
-       *Generates professional LinkedIn post with complementary image prompt*
+.
+├── .github/                       # GitHub Actions workflows
+├── .pre-commit-config.yaml        # Pre-commit hook configurations
+├── .vscode/                       # VS Code editor settings
+├── app/                           # Main application source code
+│   ├── SUB_AGENTS/                # Individual AI agents
+│   │   ├── file_handler_agent/
+│   │   │   ├── agent.py
+│   │   │   ├── prompt.py
+│   │   │   ├── tools.py
+│   │   │   └── __init__.py
+│   │   ├── LinkedIN_Agent/
+│   │   │   ├── SUB_AGENTS
+│   │   │   │   ├── LINKEDINOPTIMIZER
+│   │   │   │   │   ├── agent.py
+│   │   │   │   │   ├── prompt.py
+│   │   │   │   │   └── __init__.py
+│   │   │   │   └── LINKEDINWRITER
+│   │   │   │       ├── agent.py
+│   │   │   │       ├── prompt.py
+│   │   │   │       └── __init__.py
+│   │   │   ├── agent.py
+│   │   │   ├── prompt.py
+│   │   │   └── __init__.py
+│   │   ├── PythonAgent/
+│   │   │   ├── agent.py
+│   │   │   ├── prompt.py
+│   │   │   └── __init__.py
+│   │   └── Resume_Agent/
+│   │       ├── agent.py
+│   │       ├── prompt.py
+│   │       └── __init__.py
+│   ├── utils/                     # Utility functions and data
+│   │   ├── data
+│   │   │   ├── logos
+│   │   │   │   ├── InnovateAI_logo.jpg
+│   │   │   │   └── logo.jpg
+│   │   │   ├── data-science-architecture.png
+│   │   │   ├── evalset5eb406.evalset.json
+│   │   │   ├── praveen.tex
+│   │   │   ├── README.md
+│   │   │   └── retail_demand_data.csv
+│   │   ├── rag.py
+│   │   ├── utils.py
+│   │   └── utils.py.original
+│   ├── agent.py                   # Coordinator agent logic
+│   ├── callbacks.py               # Callback functions for agent execution
+│   ├── coordinator_prompt.py      # Prompt for the coordinator agent
+│   ├── prompt.py                  # General prompt templates
+│   └── tools.py                   # Definitions of tools available to the agent
+├── deployment/                    # Deployment configurations (e.g., Dockerfiles)
+├── eval/                          # Evaluation scripts and datasets
+├── notebooks/                     # Jupyter notebooks for experimentation
+├── tests/                         # Unit and integration tests
+├── .env-example                   # Example environment variables file
+├── Dockerfile                     # Docker build instructions
+├── Makefile                       # Makefile for common development tasks
+├── MODEL_CONFIG.md                # Model configuration details
+├── pyproject.toml                 # Poetry project configuration
+├── README.md                      # Project overview and documentation
+└── poetry.lock                    # Poetry lock file for reproducible builds
 ```
 
-### Resume Generation
+---
 
-```
-User: I need a resume for a software engineer with 5 years of experience
-Agent: *Creates ATS-optimized resume tailored to software engineering roles*
-```
+## 🤖 Agents & Capabilities
 
-### Location-Based Queries
+My Awesome Agent is composed of several specialized sub-agents, each designed to handle specific tasks:
 
-```
-User: What coffee shops are near Central Park in NYC?
-Agent: *Uses Google Maps integration to find and list coffee shops*
-```
+### 🧠 Coordinator Agent
 
-### Web Research
+*   **Role**: The central intelligence that understands user requests, determines the most suitable sub-agent or tool to use, and orchestrates the workflow.
+*   **Capabilities**:
+    *   **Tool Coordination**: Directs specific tasks to the most appropriate specialized agent (e.g., LinkedIn Writer, Resume Writer).
+    *   **Web Search & Analysis**: Coordinates web searches and web page analyses using the Google Search tool.
+    *   **User Interaction**: Presents search results and web content in a clear, organized format.
+    *   **Decision Making**: Facilitates user choices for important decisions by presenting options.
+    *   **Memory & Context**: Accesses past conversations, preferences, or knowledge to provide contextual assistance.
 
-```
-User: Summarize the latest developments in quantum computing
-Agent: *Performs web searches and analyzes content from relevant pages*
-       *Provides structured summary of findings*
-```
+### ✍️ LinkedIn Writer Agent
 
-## Extending the System
+*   **Role**: Creates engaging and professional LinkedIn posts.
+*   **Capabilities**:
+    *   **Content Generation**: Generates complete LinkedIn posts based on user-provided topics and style preferences.
+    *   **Image Prompts**: Provides complementary image prompts to enhance post engagement.
+    *   **Professional Formatting**: Ensures posts adhere to professional LinkedIn standards.
 
-### Adding New Agents
+### 📄 Resume Writer Agent
 
-1. Define a new agent in `agent.py` with appropriate tools and instructions
-2. Create a specialized prompt in `prompt.py`
-3. Register the agent as a tool in the coordinator agent
+*   **Role**: Generates and optimizes professional resumes tailored for specific job applications.
+*   **Capabilities**:
+    *   **Tailored Resumes**: Creates resumes customized for specific job targets, experience levels, and key skills.
+    *   **ATS Optimization**: Designs resumes to be Applicant Tracking System (ATS) friendly, maximizing visibility to recruiters.
+    *   **Content Customization**: Integrates professional background details and skills effectively.
 
-### Integrating Additional MCP Tools
+### 🎨 Logo Create Agent (Image Generation)
 
-1. Add new MCP server URLs in the `get_mcp_server_url` function
-2. Implement custom fallback tools for Windows compatibility
-3. Update the coordinator prompt to include descriptions of new tools
+*   **Role**: Creates high-quality, professional logos and images for business use.
+*   **Capabilities**:
+    *   **Design Generation**: Generates logos and images based on brand requirements, style preferences, and image purpose.
+    *   **Design Explanation**: Provides explanations for the design choices made.
 
-## Troubleshooting
+### 💻 Python Agent
 
-- **MCP Tools on Windows**: If you encounter `NotImplementedError` related to subprocess handling, the system will automatically use fallback mechanisms.
-- **Missing Dependencies**: Ensure BeautifulSoup and lxml are installed for web page content extraction.
-- **API Key Issues**: Verify all required API keys are correctly set in your `.env` file.
+*   **Role**: Assists with Python programming tasks and data analysis.
+*   **Capabilities**:
+    *   **Code Generation**: Writes Python code snippets based on descriptions.
+    *   **Data Analysis**: Performs data analysis tasks and provides results or explanations.
+    *   **Code Explanation**: Explains complex Python code or technical concepts.
 
-## Project Structure
+### 🗃️ File Handler Agent
 
-```
-my-awesome-agent/
-├── app/
-│   ├── __init__.py          # Package initialization
-│   ├── agent.py             # Agent definitions and MCP integration
-│   ├── prompt.py            # Agent instructions and prompts
-│   ├── tools.py             # Custom tool implementations
-│   ├── callbacks.py         # Callback implementations
-│   └── utils/               # Utility functions
-├── tests/                   # Test suite
-├── .env                     # Environment variables (not in version control)
-├── .gitignore               # Git ignore configuration
-├── requirements.txt         # Dependencies
-├── pyproject.toml           # Poetry configuration
-└── README.md                # This documentation
-```
+*   **Role**: Manages all file system operations safely and efficiently.
+*   **Capabilities**:
+    *   **Read/Write Files**: Reads and writes content to files.
+    *   **Create/Delete**: Creates new files and directories, and safely deletes existing ones (with user confirmation).
+    *   **List/Explore**: Lists directory contents (with metadata) and explores directory structures.
+    *   **Permissions**: Manages file permissions.
+    *   **Rename/Copy**: Renames and copies files and directories.
+    *   **Safety**: Implements checks (e.g., confirm before overwrite/delete) to prevent data loss.
 
-## License
+### 🌐 Google Search Tool
 
-This project is licensed under the Apache License 2.0 - see the LICENSE file for details.
+*   **Role**: Performs web searches to find relevant information.
+*   **Capabilities**:
+    *   **Information Retrieval**: Executes search queries on Google.
+    *   **Result Presentation**: Provides search results with titles, snippets, and links.
 
-## Acknowledgments
+---
 
-- Built with [Google's Agent Development Kit](https://github.com/google/adk)
-- Powered by [Gemini](https://deepmind.google/technologies/gemini/) language models
-- Developed by Team SONGOKU
+## 🔧 Tooling
+
+*   **Poetry**: Dependency management.
+*   **UV**: Faster dependency resolution.
+*   **Pre-commit**: Code quality hooks.
+*   **Pytest**: Testing framework.
+*   **Black, isort, flake8**: Code formatting and linting.
+*   **Docker**: Containerization.
+
+---
+
+## 📈 Roadmap
+
+*   **Phase 1: Core Agent Development** (Current)
+    *   Implement and refine Coordinator Agent logic.
+    *   Develop and integrate LinkedIn Writer, Resume Writer, Python Agent, and File Handler.
+    *   Establish robust testing and evaluation frameworks.
+*   **Phase 2: Enhanced Capabilities**
+    *   Integrate Logo Create Agent.
+    *   Add more advanced data analysis capabilities to Python Agent.
+    *   Improve contextual understanding and memory management for the Coordinator.
+*   **Phase 3: Deployment & Scaling**
+    *   Set up CI/CD pipelines.
+    *   Optimize for cloud deployment.
+    *   Explore advanced user interfaces.
+*   **Phase 4: New Agent Development**
+    *   Introduce new specialized agents based on user needs (e.g., Email Composer, Research Assistant).
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our `CONTRIBUTING.md` (to be created) for guidelines.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+## 📧 Contact
+
+For questions or support, please open an issue on GitHub or contact [Your Email Address].

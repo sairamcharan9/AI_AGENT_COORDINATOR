@@ -26,7 +26,7 @@ def list_all_extensions():
     print('Description:', extension.gca_resource.description)
 
 
-def get_env_var(var_name):
+def get_env_var(var_name:str):
   """Retrieves the value of an environment variable.
 
   Args:
@@ -42,10 +42,10 @@ def get_env_var(var_name):
     value = os.environ[var_name]
     return value
   except KeyError:
-    raise ValueError(f'Missing environment variable: {var_name}')
+    return ValueError(f'Missing environment variable: {var_name}')
 
 
-def get_image_bytes(filepath):
+def get_image_bytes(filepath:str):
   """Reads an image file and returns its bytes.
 
   Args:
@@ -58,7 +58,7 @@ def get_image_bytes(filepath):
   try:
     with open(filepath, 'rb') as f:  # "rb" mode for reading in binary
       image_bytes = f.read()
-    return image_bytes
+    return f"{image_bytes}"
   except FileNotFoundError:
     print(f'Error: File not found at {filepath}')
     return None
@@ -66,8 +66,29 @@ def get_image_bytes(filepath):
     print(f'Error reading file: {e}')
     return None
 
+def get_image_base64(filepath:str):
+  """Reads an image file and returns its bytes.
 
-def extract_json_from_model_output(model_output):
+  Args:
+    filepath: The path to the image file.
+
+  Returns:
+    The base64 encoded bytes of the image file, or None if the file does not exist or cannot be
+    read.
+  """
+  try:
+    with open(filepath, 'rb') as f:  # "rb" mode for reading in binary
+      image_bytes = f.read()
+    base64_encoded_data = base64.b64encode(image_bytes)
+    return base64_encoded_data.decode('utf-8')
+  except FileNotFoundError:
+    print(f'Error: File not found at {filepath}')
+    return None
+  except Exception as e:
+    print(f'Error reading file: {e}')
+    return None
+  
+def extract_json_from_model_output(model_output:str):
   """Extracts JSON object from a string that potentially contains markdown
 
   code fences.
@@ -85,7 +106,7 @@ def extract_json_from_model_output(model_output):
         model_output.replace('```json', '').replace('```', '').strip()
     )
     json_object = json.loads(cleaned_output)
-    return json_object
+    return f'{json_object}'
   except json.JSONDecodeError as e:
     msg = f'Error decoding JSON: {e}'
     print(msg)

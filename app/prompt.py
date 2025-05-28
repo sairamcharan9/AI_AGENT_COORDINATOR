@@ -19,14 +19,16 @@ All prompts have been moved to their respective module files.
 """
 
 # Import prompts from their respective modules for backward compatibility
-from .SUB_AGENTS.LinkedIN_Agent.prompt import LINKEDIN_WRITER_PROMPT
+from .SUB_AGENTS.LinkedIN_Agent.prompt import LINKEDIN_AGENT_PROMPT
 from .SUB_AGENTS.Resume_Agent.prompt import RESUME_WRITER_PROMPT
 from .SUB_AGENTS.PythonAgent.prompt import PYTHON_AGENT_PROMPT
 from .coordinator_prompt import MY_COORDINATOR_PROMPT
+from .SUB_AGENTS.file_handler_agent.prompt import FILE_HANDLER_AGENT_PROMPT
 
 __all__ = [
-    "LINKEDIN_WRITER_PROMPT", 
+    "LINKEDIN_AGENT_PROMPT", 
     "RESUME_WRITER_PROMPT",
     "PYTHON_AGENT_PROMPT",
-    "MY_COORDINATOR_PROMPT"
+    "MY_COORDINATOR_PROMPT",
+    "FILE_HANDLER_AGENT_PROMPT"
 ]

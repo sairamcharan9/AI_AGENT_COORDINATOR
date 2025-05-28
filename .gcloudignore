@@ -1,0 +1,46 @@
+# Ignore Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Ignore Git
+.git/
+.github/
+.gitignore
+
+# Ignore IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore logs and temp files
+*.log
+*.tmp
+*.temp
+logs/
+
+# Ignore environment files
+.env
+.env.local
+.env.*.local
+
+# Ignore Terraform files
+deployment/terraform/dev/.terraform/
+deployment/terraform/dev/.terraform.lock.hcl
+*.tfstate
+*.tfstate.backup
+
+# Ignore build artifacts
+dist/
+build/
+*.egg-info/
+
+# Specifically ignore MODEL_CONFIG.md
+MODEL_CONFIG.md

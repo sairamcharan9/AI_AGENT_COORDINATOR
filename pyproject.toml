@@ -20,6 +20,10 @@ dependencies = [
     "sqlglot~=25.0.0", # Added sqlglot
     "db-dtypes~=1.2.0", # Added for BigQuery pandas integration
     "beautifulsoup4 (>=4.13.4,<5.0.0)",
+    "google-auth-oauthlib (>=1.2.2,<2.0.0)",
+    "google-auth-httplib2 (>=0.2.0,<0.3.0)",
+    "google-api-python-client (>=2.170.0,<3.0.0)",
+    "psutil (>=7.0.0,<8.0.0)",
 ]
 
 # [dependency-groups] # This non-standard table will be replaced by [tool.poetry.group.dev.dependencies]

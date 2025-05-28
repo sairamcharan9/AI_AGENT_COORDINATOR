@@ -36,6 +36,14 @@ import scipy
 ```
 
 ## FILE HANDLING:
+- You have access to a specialized File Handler Agent with comprehensive file management capabilities
+- Use the File Handler Agent for operations like reading, writing, creating, and deleting files
+- The File Handler Agent provides advanced features including:
+  - File metadata retrieval and permission management
+  - File comparison and integrity verification with checksums
+  - Recursive file operations and batch processing
+  - File versioning and change tracking
+  - File compression/extraction and directory monitoring
 - Only use files explicitly mentioned as available
 - Parse data provided directly in prompts into appropriate data structures
 - Never modify original data unless specifically requested
