@@ -828,9 +828,9 @@ def filter_file_content(file_path: str, filter_pattern: str, use_regex: bool = F
     try:
         # Get the full path based on use_data_dir setting
         if use_data_dir:
-            full_path = os.path.join(PROJECT_DATA_DIRECTORY, directory_path)
+            full_path = os.path.join(PROJECT_DATA_DIRECTORY, file_path)
         else:
-            full_path = directory_path
+            full_path = file_path
         
         # Check if the directory exists
         if not os.path.isdir(full_path):

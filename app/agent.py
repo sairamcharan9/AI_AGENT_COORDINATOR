@@ -6,7 +6,7 @@ from typing import Dict, Any
 
 from google.adk.agents import LlmAgent,Agent
 from google.adk.tools.agent_tool import AgentTool
-from google.adk.tools import load_artifacts, load_memory, get_user_choice, transfer_to_agent
+from google.adk.tools import load_artifacts, load_memory, get_user_choice
 from google.adk.tools import google_search
 from google.adk.tools.load_web_page import load_web_page
 from google.adk.tools import ToolContext
@@ -19,11 +19,16 @@ from .utils.utils import get_image_bytes,get_env_var
 # Import sub-agents from their respective modules
 from .SUB_AGENTS.LinkedIN_Agent.agent import linkedin_agent
 from .SUB_AGENTS.Resume_Agent.agent import resume_writer_agent
-from .SUB_AGENTS.PythonAgent.agent import python_agent
+from .SUB_AGENTS.data_science.agent import data_science_agent
 from .SUB_AGENTS.file_handler_agent.agent import file_handler_agent
+from google.genai import types
+from google.genai import Client
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, StdioServerParameters
 
 # Load environment variables
 load_dotenv()
+
+
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -31,7 +36,16 @@ logger = logging.getLogger(__name__)
 
 # Get model from environment
 # Main coordinator model
-MODEL = os.getenv("MODEL", "gemini-2.5-flash-preview-05-20")
+MODEL = os.getenv("MODEL", "gemini-2.0-flash")
+MODEL_IMAGE = "imagen-3.0-generate-002"
+
+
+# Only Vertex AI supports image generation for now.
+client = Client(
+    vertexai=True,
+    project=os.getenv("GOOGLE_CLOUD_PROJECT"),
+    location=os.getenv("GOOGLE_CLOUD_LOCATION"),
+)
 
 
 google_search_agent = LlmAgent(
@@ -73,12 +87,15 @@ async def call_google_tool(query: str, tool_context: ToolContext) -> Dict[str, A
         # First search, just store results directly
         tool_context.state["google_search_output"] = results
     
-def generate_image(img_prompt: str, folder_name: str, file_name: str, tool_context: ToolContext):
+def generate_image(img_prompt: str, folder_name: str, file_name: str, tool_context: ToolContext, aspect_ratio:str):
     """Generates an image based on the prompt and saves it to a specified file path."""
     response = client.models.generate_images(
         model=MODEL_IMAGE,
         prompt=img_prompt,
-        config={"number_of_images": 1},
+        config= {
+    "number_of_images": 1,
+    "aspect_ratio": aspect_ratio,
+    }
     )
 
     if not response.generated_images:
@@ -95,7 +112,7 @@ def generate_image(img_prompt: str, folder_name: str, file_name: str, tool_conte
 
     # Construct the full file path where the image will be saved on disk
     # Assuming 'app/utils/data' is the base for your project's data files
-    base_data_path = "app/utils/data"
+    base_data_path = os.getenv('PROJECT_DATA_DIRECTORY')
     full_folder_path = os.path.join(base_data_path, folder_name)
     full_file_path = os.path.join(full_folder_path, file_name)
 
@@ -117,7 +134,7 @@ def generate_image(img_prompt: str, folder_name: str, file_name: str, tool_conte
 # Create Agent Tools for the coordinator
 linkedin_agent_tool = AgentTool(agent=linkedin_agent)
 resume_writer_agent_tool = AgentTool(agent=resume_writer_agent)
-python_agent_tool = AgentTool(agent=python_agent)
+data_science_agent_tool = AgentTool(agent=data_science_agent)
 file_handler_agent_tool = AgentTool(agent=file_handler_agent)
 
 # Coordinator agent that allows flexible usage of components
@@ -125,14 +142,14 @@ my_coordinator = Agent(
     name="my_coordinator",
     model=MODEL,
     instruction=prompt.MY_COORDINATOR_PROMPT,  # Using existing coordinator prompt
-    sub_agents=[resume_writer_agent],
     tools=[
+        resume_writer_agent_tool,
         call_google_tool,
         linkedin_agent_tool,
         file_handler_agent_tool,
         generate_image,
         load_artifacts,
-        python_agent_tool,
+        data_science_agent_tool,
         load_memory,
         get_user_choice,
         get_image_bytes,
@@ -141,4 +158,4 @@ my_coordinator = Agent(
 )
 
 # Set the root agent to be the coordinator for maximum flexibility
-root_agent = my_coordinator
+root_agent = data_science_agent

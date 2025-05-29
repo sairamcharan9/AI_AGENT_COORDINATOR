@@ -14,6 +14,7 @@
 
 import json
 import os
+import base64
 
 from vertexai.preview.extensions import Extension
 
@@ -61,33 +62,11 @@ def get_image_bytes(filepath:str):
     return f"{image_bytes}"
   except FileNotFoundError:
     print(f'Error: File not found at {filepath}')
-    return None
+    return f'error: File not found'
   except Exception as e:
     print(f'Error reading file: {e}')
-    return None
+    return f'error: {e}'
 
-def get_image_base64(filepath:str):
-  """Reads an image file and returns its bytes.
-
-  Args:
-    filepath: The path to the image file.
-
-  Returns:
-    The base64 encoded bytes of the image file, or None if the file does not exist or cannot be
-    read.
-  """
-  try:
-    with open(filepath, 'rb') as f:  # "rb" mode for reading in binary
-      image_bytes = f.read()
-    base64_encoded_data = base64.b64encode(image_bytes)
-    return base64_encoded_data.decode('utf-8')
-  except FileNotFoundError:
-    print(f'Error: File not found at {filepath}')
-    return None
-  except Exception as e:
-    print(f'Error reading file: {e}')
-    return None
-  
 def extract_json_from_model_output(model_output:str):
   """Extracts JSON object from a string that potentially contains markdown
 
